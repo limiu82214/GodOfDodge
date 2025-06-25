@@ -127,9 +127,8 @@ EMBED=$(jq -n \
       color:       $color,
       $ timestamp:   (now|strftime("%Y-%m-%dT%H:%M:%SZ")),
       footer:      {text: $footer}
-      # thumbnail 想用時再加：
-      ( $thumb | select(length>0) | {thumbnail:{url:.}} )
-    }
+      # thumbnail 想用時再加：      
+    } + (if $thumb != "" then {thumbnail: {url: $thumb}} else {} end)
   ]
 }')
 
