@@ -102,7 +102,8 @@ desc2=$(generate_quote "quotes.json" "template.txt") || exit 1
 emoji=$(rand_emoji) || exit 1
 footer_idx=$(shuf -i 0-$((${#FOOTERS[@]}-1)) -n 1)
 footer="${FOOTERS[$footer_idx]}"
-THUMB_URL=$(get_meme_url)
+# THUMB_URL=$(get_meme_url)
+THUMB_URL=https://raw.githubusercontent.com/limiu82214/GodOfDodge/refs/heads/main/doge_thumbnail_80x80.png
 color=$(( ((RANDOM<<15)|RANDOM) & 0xFFFFFF ))
  
 printf -v combined_desc '%s\n%s' "$desc" "$desc2"
@@ -127,7 +128,7 @@ EMBED=$(jq -n \
       $ timestamp:   (now|strftime("%Y-%m-%dT%H:%M:%SZ")),
       footer:      {text: $footer}
       # thumbnail 想用時再加：
-      # ( $thumb | select(length>0) | {thumbnail:{url:.}} )
+      ( $thumb | select(length>0) | {thumbnail:{url:.}} )
     }
   ]
 }')
