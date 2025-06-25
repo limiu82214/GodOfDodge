@@ -23,7 +23,7 @@ jobs:
           WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
           ECOWBOY_ID: ${{ secrets.ECOWBOY_ID }}
           NIMO_ID: ${{ secrets.NIMO_ID }}
-          JAMES_IDID: ${{ secrets.JAMES_IDID }}
+          JAMES_ID: ${{ secrets.JAMES_ID }}
           TAIZHU_ID: ${{ secrets.TAIZHU_ID }}
           MAX_ID: ${{ secrets.MAX_ID }}
           BLUEBBQ_ID: ${{ secrets.BLUEBBQ_ID }}
