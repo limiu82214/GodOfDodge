@@ -2,8 +2,8 @@ name: Daily Discord Quote
 
 on:
   schedule:
-    # - cron: '0 4 * * *'  # 每天 UTC+4，即台灣中午12點
-    - cron: '0 * * * *'    # 每小時一次 for 測試
+    - cron: '0 4 * * *'  # 每天 UTC+4，即台灣中午12點
+    # - cron: '0 * * * *'    # 每小時一次 for 測試
   workflow_dispatch:
 
 jobs:
