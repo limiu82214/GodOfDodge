@@ -1,0 +1,34 @@
+name: Manual Discord Quote
+
+on:
+  manual:
+
+jobs:
+  post-to-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Post Doge prophecy
+        run: |
+          bash ./manual_post_doge_quotes.sh
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+          ECOWBOY_ID: ${{ secrets.ECOWBOY_ID }}
+          NIMO_ID: ${{ secrets.NIMO_ID }}
+          JAMES_ID: ${{ secrets.JAMES_ID }}
+          TAIZHU_ID: ${{ secrets.TAIZHU_ID }}
+          MAX_ID: ${{ secrets.MAX_ID }}
+          BLUEBBQ_ID: ${{ secrets.BLUEBBQ_ID }}
+          ANGMAR_ID: ${{ secrets.ANGMAR_ID }}
+          ANGRY_MOUSE_ID: ${{ secrets.ANGRY_MOUSE_ID }}
+          MISSTONG_ID: ${{ secrets.MISSTONG_ID }}
+          MILKCOCO_ID: ${{ secrets.MILKCOCO_ID }}
+          BIGMAMA_ID: ${{ secrets.BIGMAMA_ID }}
+          RIII_ID: ${{ secrets.RIII_ID }}
+          MEMO_ID: ${{ secrets.MEMO_ID }}
+          AKUMA_ID: ${{ secrets.AKUMA_ID }}
