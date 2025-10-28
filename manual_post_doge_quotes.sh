@@ -56,7 +56,7 @@ color=$(( ((RANDOM<<15)|RANDOM) & 0xFFFFFF ))
 
 # =====  組 payload 並發送 =====
 EMBED=$(jq -n \
-  --arg title  "🕯 Doge之神的每日神諭 🕯" \
+  --arg title  "🕯 Doge之神的公告 🕯" \
   --arg desc "$combined_desc" \
   --arg footer "$emoji $footer" \
   --arg thumb  "$THUMB_URL" \
