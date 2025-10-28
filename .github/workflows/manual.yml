@@ -1,7 +1,7 @@
 name: Manual Discord Quote
 
 on:
-  manual:
+  workflow_dispatch:
 
 jobs:
   post-to-discord:
