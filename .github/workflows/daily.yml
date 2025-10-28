@@ -33,5 +33,6 @@ jobs:
           MILKCOCO_ID: ${{ secrets.MILKCOCO_ID }}
           BIGMAMA_ID: ${{ secrets.BIGMAMA_ID }}
           RIII_ID: ${{ secrets.RIII_ID }}
+          MEMO_ID: ${{ secrets.MEMO_ID }}
           AKUMA_ID: ${{ secrets.AKUMA_ID }}
 
