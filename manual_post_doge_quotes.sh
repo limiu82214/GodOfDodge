@@ -131,7 +131,7 @@ USER_INPUT="${1:-}"  # 第一個參數
 if [[ -n "$USER_INPUT" ]]; then
   echo "使用者輸入: $USER_INPUT"
   # 若你要覆蓋隨機 quote，就直接用它：
-  DESCRIPTION="$USER_INPUT"
+  printf -v combined_desc '%s\n%s' "$USER_INPUT"
 
 # =====  組 payload 並發送 =====
 EMBED=$(jq -n \
