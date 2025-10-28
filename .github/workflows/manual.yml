@@ -2,7 +2,11 @@ name: Manual Discord Quote
 
 on:
   workflow_dispatch:
-
+    inputs:
+      message:
+        description: '輸入要發送的訊息'
+        required: true
+        type: string
 jobs:
   post-to-discord:
     runs-on: ubuntu-latest
@@ -15,7 +19,7 @@ jobs:
 
       - name: Post Doge prophecy
         run: |
-          bash ./manual_post_doge_quotes.sh
+          bash ./manual_post_doge_quotes.sh "${{ github.event.inputs.message }}"
         env:
           WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
           ECOWBOY_ID: ${{ secrets.ECOWBOY_ID }}
