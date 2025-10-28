@@ -132,6 +132,7 @@ if [[ -n "$USER_INPUT" ]]; then
   echo "使用者輸入: $USER_INPUT"
   # 若你要覆蓋隨機 quote，就直接用它：
   printf -v combined_desc '%s\n%s' "$USER_INPUT"
+fi
 
 # =====  組 payload 並發送 =====
 EMBED=$(jq -n \
