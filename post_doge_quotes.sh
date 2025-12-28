@@ -58,7 +58,8 @@ FOOTERS=(
 TOTAL=$(jq length quotes.json)
 (( TOTAL > 0 )) || { echo "quotes.json 無資料"; exit 1; }
 
-INDEX=$(shuf -i 0-$((TOTAL - 1)) -n 1)
+# INDEX=$(shuf -i 0-$((TOTAL - 1)) -n 1)
+INDEX=$(( ( $(date +%s) + $(od -An -N2 -i /dev/urandom) ) % TOTAL ))
 RAW_TEXT=$(jq -r ".[$INDEX].text" quotes.json)
 RAW_BY=$(jq -r ".[$INDEX].by"  quotes.json | tr -d '\r\n ')
 
@@ -84,7 +85,8 @@ generate_quote() {
   (( TOTAL > 0 )) || { echo "$quotes_file 無資料" >&2; return 1; }
 
   local INDEX
-  INDEX=$(shuf -i 0-$((TOTAL - 1)) -n 1)
+  # INDEX=$(shuf -i 0-$((TOTAL - 1)) -n 1)
+  INDEX=$(( ( $(date +%s) + $(od -An -N2 -i /dev/urandom) ) % TOTAL ))
 
   local RAW_TEXT RAW_BY AUTHOR_ID
   RAW_TEXT=$(jq -r ".[$INDEX].text" "$quotes_file")
