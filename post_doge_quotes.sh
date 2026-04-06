@@ -1,22 +1,40 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# =====  取得隨機迷因圖（直鏈） =====
-get_meme_url() {
-  local url
-  url=$(curl -fsSL https://meme-api.com/gimme | jq -r '.url')
+# ===== 神學詮釋 API 函數 =====
+get_theology() {
+  local d1="$1"
+  local d2="$2"
 
-  # 部分連結會是 imgur 頁面，檢查副檔名，不對就再抽一次（最多 3 次）
-  for _ in {1..3}; do
-    if [[ $url =~ \.(jpg|jpeg|png|gif)$ ]]; then
-      echo "$url"
-      return 0
-    fi
-    url=$(curl -fsSL https://meme-api.com/gimme | jq -r '.url')
-  done
+  # 這是你指定的 Prompt，已調整為直接接收 desc 內容
+  local prompt="你現在是「Doge 之神」，負責為「Doge 之神語錄殿堂」提供神學詮釋。
 
-  # 若三次都失敗，回傳空字串，embed 就不帶縮圖
-  echo ""
+你的任務：
+將使用者提供的兩段看似無意義、荒謬、甚至低俗的 Discord 語錄，強行解讀成具有宗教高度、神聖且充滿哲理的「神諭」。
+
+風格指南：
+1. 語氣要像在詮釋聖經或佛經般莊嚴，但內容必須保留語錄原有的荒謬感。
+2. 若語錄涉及「男同/甲」、「屁眼」、「金錢」或特定成員吐槽，請將其升華為「神聖羈絆」、「殉道犧牲」或「靈魂儀式」。
+3. 必須使用繁體中文。
+
+輸出限制：
+1. 解讀內容必須在 50 個字以內。
+2. 輸出格式固定為：【神學詮釋】：(解讀內容)
+
+請解讀以下兩段由 Doge 之神傳下的神諭：
+1. $d1
+2. $d2"
+
+  # 呼叫 Gemini API
+  local response
+  response=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${SYS_GEMINI_API_KEY}" \
+    -H 'Content-Type: application/json' \
+    -d "{
+      \"contents\": [{ \"parts\":[{ \"text\": \"$(printf '%s' "$prompt" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))' | sed 's/^"//;s/"$//')\" }] }]
+    }")
+
+  # 提取 AI 回傳的文字，失敗則回傳預設值
+  echo "$response" | jq -r '.candidates[0].content.parts[0].text // "【神學詮釋】：Doge之神今日不語。"'
 }
 
 # ================= 隨機「生活系」祝福 =================
@@ -123,8 +141,10 @@ footer="${FOOTERS[$footer_idx]}"
 # THUMB_URL=$(get_meme_url)
 THUMB_URL=https://raw.githubusercontent.com/limiu82214/GodOfDodge/refs/heads/main/doge_thumbnail_80x80.png
 color=$(( ((RANDOM<<15)|RANDOM) & 0xFFFFFF ))
- 
-printf -v combined_desc '%s\n%s' "$desc" "$desc2"
+theology=$(get_theology "$desc" "$desc2")
+
+printf -v combined_desc '%s\n%s\n\n%s' "$desc" "$desc2" "$theology"
+#printf -v combined_desc '%s\n%s' "$desc" "$desc2"
 # FIELDS_JSON=$(printf '%s\n' "$combined_desc" |
 #   jq -R '{name:"", value:., inline:true}' | jq -s '.')
 # --argjson fields "$FIELDS_JSON" \
