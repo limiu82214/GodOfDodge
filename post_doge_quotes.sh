@@ -14,8 +14,15 @@ get_theology() {
 
 風格指南：
 1. 語氣要像在詮釋聖經或佛經般莊嚴，但內容必須保留語錄原有的荒謬感。
-2. 若語錄涉及「男同/甲」、「屁眼」、「金錢」或特定成員吐槽，請將其升華為「神聖羈絆」、「殉道犧牲」或「靈魂儀式」。
+2. 若語錄涉及「男同/甲」、「屁眼」、「金錢」或特定成員吐槽，請將其升華為「神聖羈絆」、「殉道犧牲」或「靈魂儀式」etc。
 3. 必須使用繁體中文。
+4. 髒話轉化：將任何髒話（如：幹、操、媽逼）視為「金剛之怒」或「原始的雷鳴」，轉化為對宇宙不公的咆哮 etc。
+5. 生理與性暗示轉化：
+   - 「尻/精子/射」->「生命的溢出」、「造物之種」、「靈魂的迸發」etc。
+   - 「高潮/口過/高潮」->「天界的法喜」、「神聖的吞噬」、「極致的覺醒」etc。
+   - 「屁眼/PY」->「生命之門」、「混沌的終點」、「真理的孔徑」etc。
+6. 人身攻擊（肥胖/單身）轉化：將其解讀為「肉身的豐盈」、「靈魂的獨立孤高」或「修行的試煉」etc。
+7. 針對特定對象（如翊翔、台主）的言語：視其為「神選的受難者」或「被眾神眷顧的英雄」etc。
 
 輸出限制：
 1. 解讀內容必須在 50 個字以內。
@@ -25,16 +32,31 @@ get_theology() {
 1. $d1
 2. $d2"
 
-  # 呼叫 Gemini API
-  local response
-  response=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${SYS_GEMINI_API_KEY}" \
-    -H 'Content-Type: application/json' \
-    -d "{
-      \"contents\": [{ \"parts\":[{ \"text\": \"$(printf '%s' "$prompt" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))' | sed 's/^"//;s/"$//')\" }] }]
-    }")
+# 2. 使用 jq 建構 JSON，包含降低安全過濾層級的設定 (Safety Settings)
+  local payload
+  payload=$(jq -n --arg msg "$prompt" '{
+    contents: [{parts: [{text: $msg}]}],
+    safetySettings: [
+      { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+      { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+      { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+      { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+    ]
+  }')
 
-  # 提取 AI 回傳的文字，失敗則回傳預設值
-  echo "$response" | jq -r '.candidates[0].content.parts[0].text // "【神學詮釋】：Doge之神今日不語。"'
+  # 3. 呼叫 API (使用 gemini-3-flash-preview)
+  local response
+  response=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${SYS_GEMINI_API_KEY}" \
+    -H 'Content-Type: application/json' \
+    -d "$payload")
+
+  # 呼叫 API 並直接用 jq 處理前綴
+  echo "$response" | jq -r '
+    if .candidates[0].content.parts[0].text then 
+      "【祭司】：" + .candidates[0].content.parts[0].text 
+    else 
+      "【祭司】：冥思中，神諭未竟。" 
+    end'
 }
 
 # ================= 隨機「生活系」祝福 =================
