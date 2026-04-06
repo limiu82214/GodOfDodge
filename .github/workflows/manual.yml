@@ -21,6 +21,7 @@ jobs:
         run: |
           bash ./manual_post_doge_quotes.sh "${{ github.event.inputs.message }}"
         env:
+          SYS_GEMINI_API_KEY: ${{ secrets.SYS_GEMINI_API_KEY }}
           WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
           ECOWBOY_ID: ${{ secrets.ECOWBOY_ID }}
           NIMO_ID: ${{ secrets.NIMO_ID }}
