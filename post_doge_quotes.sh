@@ -53,9 +53,9 @@ get_theology() {
   # 呼叫 API 並直接用 jq 處理前綴
   echo "$response" | jq -r '
     if .candidates[0].content.parts[0].text then 
-      "【祭司】：" + .candidates[0].content.parts[0].text 
+      "【祭司解籤】：" + .candidates[0].content.parts[0].text 
     else 
-      "【祭司】：冥思中，神諭未竟。" 
+      "【祭司解籤】：冥思中，神諭未竟。" 
     end'
 }
 
