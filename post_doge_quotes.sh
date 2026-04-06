@@ -55,7 +55,7 @@ get_theology() {
     if .candidates[0].content.parts[0].text then 
       .candidates[0].content.parts[0].text 
     else 
-      冥思中，神諭未竟。" 
+      "冥思中，神諭未竟。" 
     end'
 }
 
